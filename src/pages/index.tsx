@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Inter } from "next/font/google";
+import AudioSlicerContainer from "src/features/audioSlicer/AudioSlicerContainer";
 
 export default function Home() {
   return (
@@ -15,6 +15,7 @@ export default function Home() {
       </Head>
       <main>
         <h1 className="text-3xl font-bold underline">Guava Guava Guava!</h1>
+        <AudioSlicerContainer />
       </main>
     </>
   );
