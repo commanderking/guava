@@ -9,7 +9,6 @@ const REGION_ID = "userAudio";
 
 const WaveForm = ({ audioUrl }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const waveSurferRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, toggleIsPlaying] = useState(false);
   const [waveSurferObject, setWaveSurferObject] =
     useState<WaveSurferType>(null);
@@ -66,7 +65,7 @@ const WaveForm = ({ audioUrl }: Props) => {
   };
 
   const pauseRegion = () => {
-    waveSurferRef?.current?.pause();
+    waveSurferObject.pause();
   };
 
   const playPause = () => {
