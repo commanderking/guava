@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 // @ts-ignore - need WaveSurfer type to satsify types here
 import { WaveSurfer as WaveSurferType } from "wavesurfer.js";
 type Props = {
-  audioUrl: string;
+  audioUrl: string | null;
 };
 
 const REGION_ID = "userAudio";
@@ -20,7 +20,7 @@ const WaveForm = ({ audioUrl }: Props) => {
       (await import("wavesurfer.js/dist/plugin/wavesurfer.regions.min.js"))
         .default;
 
-    if (!containerRef.current) {
+    if (!containerRef.current || !audioUrl) {
       return null;
     }
 

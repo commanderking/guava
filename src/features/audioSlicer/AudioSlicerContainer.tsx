@@ -2,7 +2,7 @@ import { useState } from "react";
 import WaveForm from "src/features/audioSlicer/components/WaveForm";
 
 export default function AudioSlicerContainer() {
-  const [audio, setAudio] = useState<string | undefined>(undefined);
+  const [audio, setAudio] = useState<string | null>(null);
 
   const loadAudio = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event?.target?.files;
