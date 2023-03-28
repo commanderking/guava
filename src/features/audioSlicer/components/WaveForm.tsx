@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
-
+// @ts-ignore - need WaveSurfer type to satsify types here
+import { WaveSurfer as WaveSurferType } from "wavesurfer.js";
 type Props = {
   audioUrl: string;
 };
@@ -7,19 +8,18 @@ type Props = {
 const REGION_ID = "userAudio";
 
 const WaveForm = ({ audioUrl }: Props) => {
-  const containerRef = useRef(null);
-  const waveSurferRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const waveSurferRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, toggleIsPlaying] = useState(false);
-  const [waveSurferObject, setWaveSurferObject] = useState(null);
-  console.log({ waveSurferObject });
+  const [waveSurferObject, setWaveSurferObject] =
+    useState<WaveSurferType>(null);
 
   const create = async () => {
     const WaveSurfer = (await import("wavesurfer.js")).default;
-    const RegionsPlugin = (
-      await import("wavesurfer.js/dist/plugin/wavesurfer.regions.min.js")
-    ).default;
-
-    console.log("wave surfing");
+    const RegionsPlugin =
+      // @ts-ignore - not sure if there's a better way to dynamically import here
+      (await import("wavesurfer.js/dist/plugin/wavesurfer.regions.min.js"))
+        .default;
 
     if (!containerRef.current) {
       return null;
@@ -34,19 +34,18 @@ const WaveForm = ({ audioUrl }: Props) => {
               id: REGION_ID,
               start: 0,
               end: 3,
-              loop: true,
+              loop: false,
             },
           ],
         }),
       ],
     });
-    waveSurfer.on("ready", () => {
-      if (!waveSurferRef.current) {
-        waveSurferRef.current = waveSurfer;
-      }
-    });
-    waveSurfer.load(audioUrl);
 
+    waveSurfer.on("region-out", () => {
+      toggleIsPlaying(false);
+    });
+
+    waveSurfer.load(audioUrl);
     setWaveSurferObject(waveSurfer);
 
     return () => {
@@ -55,50 +54,28 @@ const WaveForm = ({ audioUrl }: Props) => {
   };
 
   const playRegion = () => {
-    // console.log({ waveSurferObject });
-    // console.log(waveSurferObject.regions.list[REGION_ID]);
-
-    // waveSurferObject.regions.list[REGION_ID].play();
-
-    if (!waveSurferObject) {
-      return;
-    }
-
-    console.log(waveSurferObject.regions.list[REGION_ID].start);
-
     const { start, end } = waveSurferObject.regions.list[REGION_ID];
-
     const currentTime = waveSurferObject.getCurrentTime();
 
-    console.log({ currentTime });
-
-    console.log({ start });
-    console.log({ end });
-
+    // custom logic in case user pauses in middle of play. We don't want to play from the beginning of the region again, which is what region.list[REGION_ID].play() defaults to
     if (currentTime < end && currentTime > start) {
-      waveSurferRef.current.play();
+      waveSurferObject.play(currentTime, end);
     } else {
-      waveSurferRef.current.play(
-        waveSurferObject.regions.list[REGION_ID].start
-      );
+      waveSurferObject.regions.list[REGION_ID].play();
     }
   };
 
   const pauseRegion = () => {
-    waveSurferRef.current.pause();
+    waveSurferRef?.current?.pause();
   };
 
   const playPause = () => {
-    console.log({ isPlaying });
-    if (!isPlaying) {
-      toggleIsPlaying(true);
-      console.log({ isPlaying });
-
+    if (isPlaying) {
+      pauseRegion();
+    } else {
       playRegion();
-      return;
     }
-    pauseRegion();
-    toggleIsPlaying(false);
+    toggleIsPlaying(!isPlaying);
   };
 
   useEffect(() => {
@@ -110,15 +87,19 @@ const WaveForm = ({ audioUrl }: Props) => {
 
   return (
     <>
-      {audioUrl && <div key={"audioUrl"} ref={containerRef} />}
-      <button
-        onClick={() => {
-          return playPause();
-        }}
-        type="button"
-      >
-        Play
-      </button>
+      {audioUrl && (
+        <div>
+          <div key={"audioUrl"} ref={containerRef} />
+          <button
+            onClick={() => {
+              return playPause();
+            }}
+            type="button"
+          >
+            {isPlaying ? "Pause" : "Play"}
+          </button>
+        </div>
+      )}
     </>
   );
 };
