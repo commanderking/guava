@@ -7,8 +7,16 @@ type Props = {
 
 const REGION_ID = "userAudio";
 
+const defaultRegion = {
+  id: REGION_ID,
+  start: 0,
+  end: 3,
+  loop: false,
+};
+
 const WaveForm = ({ audioUrl }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [loadedAudio, setLoadedAudio] = useState<string | null>(null);
   const [isPlaying, toggleIsPlaying] = useState(false);
   const [waveSurferObject, setWaveSurferObject] =
     useState<WaveSurferType>(null);
@@ -28,14 +36,7 @@ const WaveForm = ({ audioUrl }: Props) => {
       container: containerRef.current,
       plugins: [
         RegionsPlugin.create({
-          regions: [
-            {
-              id: REGION_ID,
-              start: 0,
-              end: 3,
-              loop: false,
-            },
-          ],
+          regions: [defaultRegion],
         }),
       ],
     });
@@ -78,10 +79,16 @@ const WaveForm = ({ audioUrl }: Props) => {
   };
 
   useEffect(() => {
-    if (audioUrl) {
-      console.log("instantiating audio");
+    if (loadedAudio === null && audioUrl) {
       create();
     }
+    // Avoid creating new instance of waveSurferObject every time a new audio file is added
+    if (loadedAudio !== null && audioUrl !== loadedAudio) {
+      waveSurferObject.load(audioUrl);
+      waveSurferObject.clearRegions();
+      waveSurferObject.addRegion(defaultRegion);
+    }
+    setLoadedAudio(audioUrl);
   }, [audioUrl]);
 
   return (
