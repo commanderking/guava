@@ -1,11 +1,13 @@
 import { useRef, useEffect, useState } from "react";
 // @ts-ignore - need WaveSurfer type to satsify types here
 import { WaveSurfer as WaveSurferType } from "wavesurfer.js";
+import { PlayCircle, PauseCircle } from "react-feather";
 type Props = {
   audioUrl: string | null;
 };
 
-const REGION_ID = "userAudio";
+// With only one region allowed, setting a REGION_ID is fine.
+const REGION_ID = "SINGLE_REGION_ID";
 
 const defaultRegion = {
   id: REGION_ID,
@@ -16,7 +18,6 @@ const defaultRegion = {
 
 const WaveForm = ({ audioUrl }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [loadedAudio, setLoadedAudio] = useState<string | null>(null);
   const [isPlaying, toggleIsPlaying] = useState(false);
   const [waveSurferObject, setWaveSurferObject] =
     useState<WaveSurferType>(null);
@@ -32,20 +33,24 @@ const WaveForm = ({ audioUrl }: Props) => {
       return null;
     }
 
+    // Clear out children so only one audio is visible. Removing this will append a new audio wave everytime the audio URL changes.
+    containerRef.current.innerHTML = "";
+
     const waveSurfer = WaveSurfer.create({
       container: containerRef.current,
-      plugins: [
-        RegionsPlugin.create({
-          regions: [defaultRegion],
-        }),
-      ],
-    });
-
-    waveSurfer.on("region-out", () => {
-      toggleIsPlaying(false);
+      height: 64,
+      plugins: [RegionsPlugin.create({})],
     });
 
     waveSurfer.load(audioUrl);
+    waveSurfer.on("ready", () => {
+      waveSurfer.clearRegions();
+      console.log(waveSurfer.getDuration());
+      waveSurfer.addRegion({ ...defaultRegion, end: waveSurfer.getDuration() });
+    });
+    waveSurfer.on("region-out", () => {
+      toggleIsPlaying(false);
+    });
     setWaveSurferObject(waveSurfer);
 
     return () => {
@@ -79,31 +84,25 @@ const WaveForm = ({ audioUrl }: Props) => {
   };
 
   useEffect(() => {
-    if (loadedAudio === null && audioUrl) {
-      create();
-    }
-    // Avoid creating new instance of waveSurferObject every time a new audio file is added
-    if (loadedAudio !== null && audioUrl !== loadedAudio) {
-      waveSurferObject.load(audioUrl);
-      waveSurferObject.clearRegions();
-      waveSurferObject.addRegion(defaultRegion);
-    }
-    setLoadedAudio(audioUrl);
+    create();
   }, [audioUrl]);
 
   return (
     <>
       {audioUrl && (
-        <div>
-          <div key={"audioUrl"} ref={containerRef} />
+        <div className="flex">
           <button
+            className="flex-none"
             onClick={() => {
               return playPause();
             }}
             type="button"
           >
-            {isPlaying ? "Pause" : "Play"}
+            {isPlaying ? <PauseCircle size={48} /> : <PlayCircle size={48} />}
           </button>
+          <div className="flex-initial w-full">
+            <div className="w-full" ref={containerRef} />
+          </div>
         </div>
       )}
     </>
