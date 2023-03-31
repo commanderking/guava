@@ -13,8 +13,14 @@ export default function AudioSlicerContainer() {
 
   return (
     <div>
-      <div>Audio Slicer</div>
-      <input type="file" onChange={loadAudio}></input>
+      <div className="text-center">
+        <h1 className="text-3xl font-bold">Guava Slicer</h1>
+        <input
+          className="border-2 p-4 rounded-xl"
+          type="file"
+          onChange={loadAudio}
+        ></input>
+      </div>
       <div className="w-10/12 m-auto">
         <WaveForm audioUrl={audio} />
       </div>

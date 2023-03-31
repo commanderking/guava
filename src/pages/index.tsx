@@ -14,8 +14,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1 className="text-3xl font-bold">Guava Slicer</h1>
-        <AudioSlicerContainer />
+        <div className="mt-8 w-9/12 m-auto border-2 p-4 rounded-xl">
+          <AudioSlicerContainer />
+        </div>
       </main>
     </>
   );
