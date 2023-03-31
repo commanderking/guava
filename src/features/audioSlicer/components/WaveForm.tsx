@@ -44,11 +44,11 @@ const WaveForm = ({ audioUrl }: Props) => {
 
     waveSurfer.load(audioUrl);
     waveSurfer.on("ready", () => {
+      const audioEnd = waveSurfer.getDuration();
       waveSurfer.clearRegions();
-      console.log(waveSurfer.getDuration());
-      waveSurfer.addRegion({ ...defaultRegion, end: waveSurfer.getDuration() });
+      waveSurfer.addRegion({ ...defaultRegion, end: audioEnd });
     });
-    waveSurfer.on("region-out", () => {
+    waveSurfer.on("pause", () => {
       toggleIsPlaying(false);
     });
     setWaveSurferObject(waveSurfer);
