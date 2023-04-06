@@ -2,12 +2,11 @@ import { useRef, useEffect, useState } from "react";
 // @ts-ignore - need WaveSurfer type to satsify types here
 import { WaveSurfer as WaveSurferType } from "wavesurfer.js";
 import { PlayCircle, PauseCircle, Plus, StopCircle } from "react-feather";
+import { randomRGBA } from "src/features/audioSlicer/utils";
+
 type Props = {
   audioUrl: string | null;
 };
-
-// With only one region allowed, setting a REGION_ID is fine.
-const REGION_ID = "SINGLE_REGION_ID";
 
 type AudioSlice = {
   id: string;
@@ -17,33 +16,12 @@ type AudioSlice = {
   color: string;
 };
 
-function random_rgba() {
-  var o = Math.round,
-    r = Math.random,
-    s = 255;
-  return (
-    "rgba(" +
-    o(r() * s) +
-    "," +
-    o(r() * s) +
-    "," +
-    o(r() * s) +
-    "," +
-    "0.2" +
-    ")"
-  );
-}
-
-var color = random_rgba();
-
 const WaveForm = ({ audioUrl }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlayingFullTrack, toggleIsPlayingFullTrack] = useState(false);
-  const [currentlyPlayingRegion, setCurrentlyPlayingRegion] = useState<
+  const [currentlyPlayingRegionId, setcurrentlyPlayingRegionId] = useState<
     string | null
   >(null);
-
-  const isPlaying = isPlayingFullTrack || Boolean(currentlyPlayingRegion);
 
   const [waveSurferObject, setWaveSurferObject] =
     useState<WaveSurferType>(null);
@@ -77,7 +55,7 @@ const WaveForm = ({ audioUrl }: Props) => {
       waveSurfer.enableDragSelection();
     });
     waveSurfer.on("pause", () => {
-      setCurrentlyPlayingRegion(null);
+      setcurrentlyPlayingRegionId(null);
     });
 
     setWaveSurferObject(waveSurfer);
@@ -89,14 +67,14 @@ const WaveForm = ({ audioUrl }: Props) => {
 
   // Don't use playPause here because playing the slices also triggers playing. The play/pause can get out of sync
   const playPauseFullTrack = () => {
-    if (isPlaying) {
+    if (isPlayingFullTrack) {
       waveSurferObject.pause();
     } else {
       waveSurferObject.play();
     }
 
     // Reference !isPlaying here since we want to pause and play even if regions are playing. isPlaying looks at both if played from a region or from the start.
-    toggleIsPlayingFullTrack(!isPlaying);
+    toggleIsPlayingFullTrack(!isPlayingFullTrack);
   };
 
   const addNewSlice = (id: string, color: string) => {
@@ -106,14 +84,13 @@ const WaveForm = ({ audioUrl }: Props) => {
   };
 
   const playStopRegion = (id: string) => {
-    if (currentlyPlayingRegion === id) {
-      setCurrentlyPlayingRegion(null);
+    toggleIsPlayingFullTrack(false);
+    if (currentlyPlayingRegionId === id) {
+      setcurrentlyPlayingRegionId(null);
       waveSurferObject.stop();
       waveSurferObject.setCurrentTime(waveSurferObject.regions.list[id].start);
     } else {
-      waveSurferObject.stop();
-      console.log(" in else");
-      setCurrentlyPlayingRegion(id);
+      setcurrentlyPlayingRegionId(id);
       waveSurferObject.regions.list[id].play();
     }
   };
@@ -134,7 +111,11 @@ const WaveForm = ({ audioUrl }: Props) => {
               }}
               type="button"
             >
-              {isPlaying ? <PauseCircle size={48} /> : <PlayCircle size={48} />}
+              {isPlayingFullTrack ? (
+                <PauseCircle size={48} />
+              ) : (
+                <PlayCircle size={48} />
+              )}
             </button>
             <div className="flex-initial w-full">
               <div className="w-full" ref={containerRef} />
@@ -144,7 +125,7 @@ const WaveForm = ({ audioUrl }: Props) => {
             <button
               className="flex items-center bg-lime-200 hover:bg-lime-300 text-black font-bold py-2 px-4 rounded-full"
               onClick={() => {
-                addNewSlice(crypto.randomUUID(), random_rgba());
+                addNewSlice(crypto.randomUUID(), randomRGBA());
               }}
             >
               <Plus size={24} />
@@ -163,7 +144,7 @@ const WaveForm = ({ audioUrl }: Props) => {
                   playStopRegion(slice.id);
                 }}
               >
-                {slice.id === currentlyPlayingRegion ? (
+                {slice.id === currentlyPlayingRegionId ? (
                   <StopCircle fill={slice.color} size={48} />
                 ) : (
                   <PlayCircle fill={slice.color} size={48} />
