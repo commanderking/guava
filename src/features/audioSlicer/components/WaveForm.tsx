@@ -3,7 +3,8 @@ import { useRef, useEffect, useState } from "react";
 import { WaveSurfer as WaveSurferType } from "wavesurfer.js";
 import { PlayCircle, PauseCircle, Plus, StopCircle } from "react-feather";
 import { randomRGBA } from "src/features/audioSlicer/utils";
-
+// @ts-ignore - it's able to find the RegionParams type
+import { RegionParams } from "wavesurfer.js/dist/plugin/wavesurfer.regions.min.js";
 type Props = {
   audioUrl: string | null;
 };
@@ -39,7 +40,7 @@ const WaveForm = ({ audioUrl }: Props) => {
       return null;
     }
 
-    // Clear out children so only one audio is visible. Removing this will append a new audio wave everytime the audio URL changes.
+    // Clear out children so only one audio is visible. Otherwise, a new audio wave will be created everytime a new audio file is selected.
     containerRef.current.innerHTML = "";
 
     const waveSurfer = WaveSurfer.create({
@@ -49,13 +50,23 @@ const WaveForm = ({ audioUrl }: Props) => {
     });
 
     waveSurfer.load(audioUrl);
+    waveSurfer.enableDragSelection({ color: randomRGBA() });
+
     waveSurfer.on("ready", () => {
       waveSurfer.clearRegions();
       setAudioSlices([]);
-      waveSurfer.enableDragSelection();
     });
     waveSurfer.on("pause", () => {
       setcurrentlyPlayingRegionId(null);
+    });
+
+    waveSurfer.on("region-created", (region: RegionParams) => {
+      const regionColor = randomRGBA();
+      region.color = regionColor;
+
+      // region-created triggers right before the region is added regions.list, so we need to add newRegion to the audioSlices.
+      // I also initially tried to store only values needed for rendering, but trying to store data as [...audioSlices, region] doesn't work. This function always thinks that audioSlices is [] even as the state is updated.
+      setAudioSlices([...Object.values(waveSurfer.regions.list), region]);
     });
 
     setWaveSurferObject(waveSurfer);
@@ -73,14 +84,12 @@ const WaveForm = ({ audioUrl }: Props) => {
       waveSurferObject.play();
     }
 
-    // Reference !isPlaying here since we want to pause and play even if regions are playing. isPlaying looks at both if played from a region or from the start.
     toggleIsPlayingFullTrack(!isPlayingFullTrack);
   };
 
-  const addNewSlice = (id: string, color: string) => {
-    const newRegion = { id, start: 0, end: 3, loop: false, color };
+  const addNewSlice = () => {
+    const newRegion = { start: 0, end: 3, loop: false, color: randomRGBA() };
     waveSurferObject.addRegion(newRegion);
-    setAudioSlices([...audioSlices, newRegion]);
   };
 
   const playStopRegion = (id: string) => {
@@ -125,7 +134,7 @@ const WaveForm = ({ audioUrl }: Props) => {
             <button
               className="flex items-center bg-lime-200 hover:bg-lime-300 text-black font-bold py-2 px-4 rounded-full"
               onClick={() => {
-                addNewSlice(crypto.randomUUID(), randomRGBA());
+                addNewSlice();
               }}
             >
               <Plus size={24} />
