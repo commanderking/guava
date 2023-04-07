@@ -9,14 +9,6 @@ type Props = {
   audioUrl: string | null;
 };
 
-type AudioSlice = {
-  id: string;
-  start: number;
-  end: number;
-  loop: Boolean;
-  color: string;
-};
-
 const WaveForm = ({ audioUrl }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlayingFullTrack, toggleIsPlayingFullTrack] = useState(false);
@@ -27,7 +19,7 @@ const WaveForm = ({ audioUrl }: Props) => {
   const [waveSurferObject, setWaveSurferObject] =
     useState<WaveSurferType>(null);
 
-  const [audioSlices, setAudioSlices] = useState<AudioSlice[]>([]);
+  const [audioSlices, setAudioSlices] = useState<RegionParams[]>([]);
 
   const create = async () => {
     const WaveSurfer = (await import("wavesurfer.js")).default;
