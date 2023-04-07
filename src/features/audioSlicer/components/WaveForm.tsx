@@ -87,6 +87,7 @@ const WaveForm = ({ audioUrl }: Props) => {
     toggleIsPlayingFullTrack(!isPlayingFullTrack);
   };
 
+  // Only used when user clicks the "Add New Slice Button"
   const addNewSlice = () => {
     const newRegion = { start: 0, end: 3, loop: false, color: randomRGBA() };
     waveSurferObject.addRegion(newRegion);
@@ -118,7 +119,6 @@ const WaveForm = ({ audioUrl }: Props) => {
               onClick={() => {
                 return playPauseFullTrack();
               }}
-              type="button"
             >
               {isPlayingFullTrack ? (
                 <PauseCircle size={48} />
@@ -148,7 +148,6 @@ const WaveForm = ({ audioUrl }: Props) => {
           return (
             <div key={slice.id} className="flex items-center">
               <button
-                key={slice.id}
                 onClick={() => {
                   playStopRegion(slice.id);
                 }}
