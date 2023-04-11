@@ -5,11 +5,16 @@ import { PlayCircle, PauseCircle, Plus, StopCircle } from "react-feather";
 import { randomRGBA } from "src/features/audioSlicer/utils";
 // @ts-ignore - it's able to find the RegionParams type
 import { RegionParams } from "wavesurfer.js/dist/plugin/wavesurfer.regions.min.js";
+import { SavedSlice } from "src/features/audioSlicer/types";
+
 type Props = {
   audioUrl: string | null;
+  loadedSlices?: SavedSlice[];
 };
 
-const WaveForm = ({ audioUrl }: Props) => {
+const defaultRGBA = "rgba(0, 0, 0, 0.1)";
+
+const WaveForm = ({ audioUrl, loadedSlices }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlayingFullTrack, toggleIsPlayingFullTrack] = useState(false);
   const [currentlyPlayingRegionId, setcurrentlyPlayingRegionId] = useState<
@@ -42,22 +47,30 @@ const WaveForm = ({ audioUrl }: Props) => {
     });
 
     waveSurfer.load(audioUrl);
-    waveSurfer.enableDragSelection({ color: randomRGBA() });
+    waveSurfer.enableDragSelection({ color: defaultRGBA });
 
     waveSurfer.on("ready", () => {
       waveSurfer.clearRegions();
-      setAudioSlices([]);
+      if (loadedSlices && waveSurfer) {
+        loadedSlices.forEach((slice) => {
+          waveSurfer.addRegion(slice);
+        });
+      }
     });
     waveSurfer.on("pause", () => {
       setcurrentlyPlayingRegionId(null);
     });
 
     waveSurfer.on("region-created", (region: RegionParams) => {
-      const regionColor = randomRGBA();
-      region.color = regionColor;
+      // If slice is added, it should have a defaultRGBA. Assign a random color
+      // Don't add a randomRGBA if one has already been assigned from a previous case
+      if (region.color === defaultRGBA) {
+        const regionColor = randomRGBA();
+        region.color = regionColor;
+      }
 
-      // region-created triggers right before the region is added regions.list, so we need to add newRegion to the audioSlices.
-      // I also initially tried to store only values needed for rendering, but trying to store data as [...audioSlices, region] doesn't work. This function always thinks that audioSlices is [] even as the state is updated.
+      // region-created triggers right before the region is added regions.list, so we need to add newRegion to the list of regions
+      // I also tried to store only values needed for rendering, but trying to store data as [...audioSlices, region] doesn't work. This function always thinks that audioSlices is [] even as the state is updated.
       setAudioSlices([...Object.values(waveSurfer.regions.list), region]);
     });
 
@@ -98,6 +111,8 @@ const WaveForm = ({ audioUrl }: Props) => {
   };
 
   useEffect(() => {
+    setAudioSlices([]);
+
     create();
   }, [audioUrl]);
 
