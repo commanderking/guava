@@ -81,7 +81,7 @@ const WaveForm = ({ audioUrl }: Props) => {
 
   // Only used when user clicks the "Add New Slice Button"
   const addNewSlice = () => {
-    const newRegion = { start: 0, end: 3, loop: false, color: randomRGBA() };
+    const newRegion = { start: 0, end: 3 };
     waveSurferObject.addRegion(newRegion);
   };
 
