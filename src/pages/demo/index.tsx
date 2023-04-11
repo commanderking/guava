@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import WaveForm from "src/features/audioSlicer/components/WaveForm";
 import Select from "src/components/Select";
+import { slicesData } from "src/features/demo/data";
 
 const options = [
   {
@@ -31,7 +32,13 @@ const DemoContainer = () => {
         />
       </div>
       <div className="p-8">
-        <WaveForm audioUrl={selectedAudio} />
+        <WaveForm
+          audioUrl={selectedAudio}
+          loadedSlices={
+            (slicesData[selectedAudio] && slicesData[selectedAudio].slices) ||
+            []
+          }
+        />
       </div>
     </div>
   );
