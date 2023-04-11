@@ -28,7 +28,6 @@ const DemoContainer = () => {
           options={options}
           defaultText="Select Demo Audio"
           handleSelect={handleSelect}
-          selectedValue={selectedAudio}
         />
       </div>
       <div className="p-8">
