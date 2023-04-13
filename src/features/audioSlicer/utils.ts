@@ -23,3 +23,22 @@ export function randomRGBA() {
 export const getSlicesById = (slices: SavedSlice[]) => {
   return _.keyBy(slices, "id");
 };
+
+export const formatSlicesToSave = (
+  audioId: string,
+  regions: Region[],
+  sliceTextById: { [key: string]: any }
+) => {
+  const slices = regions.map((region) => {
+    const text = sliceTextById[region.id]?.text || "";
+    return {
+      ..._.pick(region, ["id", "color", "start", "end"]),
+      text,
+    };
+  });
+
+  return {
+    id: audioId,
+    slices,
+  };
+};

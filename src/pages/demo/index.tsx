@@ -42,7 +42,11 @@ const DemoContainer = () => {
         />
       </div>
       <div className="p-8">
-        <WaveForm audioUrl={selectedAudio} loadedSlices={loadedSlices} />
+        <WaveForm
+          audioUrl={selectedAudio}
+          loadedSlices={loadedSlices}
+          audioId={slicesData[selectedAudio]?.id}
+        />
       </div>
     </div>
   );

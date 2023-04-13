@@ -2,20 +2,26 @@ import { useRef, useEffect, useState } from "react";
 // @ts-ignore - need WaveSurfer type to satsify types here
 import { WaveSurfer as WaveSurferType } from "wavesurfer.js";
 import { PlayCircle, PauseCircle, StopCircle } from "react-feather";
-import { randomRGBA, getSlicesById } from "src/features/audioSlicer/utils";
+import {
+  randomRGBA,
+  getSlicesById,
+  formatSlicesToSave,
+} from "src/features/audioSlicer/utils";
 // @ts-ignore - only way to get this type(?)
 import { Region } from "wavesurfer.js/dist/plugin/regions.d.ts";
 import { SavedSlice } from "src/features/audioSlicer/types";
 import SliceText from "src/features/audioSlicer/components/SliceText";
+import SaveSlices from "src/features/audioSlicer/components/SaveSlices";
 
 type Props = {
   audioUrl: string | null;
   loadedSlices?: SavedSlice[];
+  audioId?: string;
 };
 
 const defaultRGBA = "rgba(0, 0, 0, 0.1)";
 
-const WaveForm = ({ audioUrl, loadedSlices = [] }: Props) => {
+const WaveForm = ({ audioUrl, loadedSlices = [], audioId }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlayingFullTrack, toggleIsPlayingFullTrack] = useState(false);
   const [currentlyPlayingRegionId, setcurrentlyPlayingRegionId] = useState<
@@ -23,8 +29,10 @@ const WaveForm = ({ audioUrl, loadedSlices = [] }: Props) => {
   >(null);
 
   // Currently needed to keep track of the text of each slice. Since we don't control the params stored in wavesurfer region object, we can't append the text to the object. This is the workaround for now.
-  const [textById, setTextById] = useState(getSlicesById(loadedSlices));
+  const [textById, setTextById] = useState();
   const [editingSliceId, setEditingSliceId] = useState<string | null>(null);
+
+  console.log({ textById });
 
   const [waveSurferObject, setWaveSurferObject] =
     useState<WaveSurferType>(null);
@@ -110,8 +118,9 @@ const WaveForm = ({ audioUrl, loadedSlices = [] }: Props) => {
 
   useEffect(() => {
     setAudioSlices([]);
+    setTextById(getSlicesById(loadedSlices));
     create();
-  }, [audioUrl]);
+  }, [audioUrl, loadedSlices]);
 
   return (
     <>
@@ -170,6 +179,21 @@ const WaveForm = ({ audioUrl, loadedSlices = [] }: Props) => {
             </div>
           );
         })}
+        {audioSlices.length > 0 && (
+          <SaveSlices
+            handleSave={() => {
+              const data = formatSlicesToSave(
+                // Hack for now - we should always have an audioId. Want to think through how to implement
+                audioId || audioUrl || "",
+                Object.values(waveSurferObject.regions.list),
+                textById
+              );
+
+              // console log to save to data until we implement backend or in memory
+              console.log({ data });
+            }}
+          />
+        )}
       </div>
     </>
   );
