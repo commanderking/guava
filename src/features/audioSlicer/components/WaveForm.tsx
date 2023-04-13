@@ -120,17 +120,10 @@ const WaveForm = ({ audioUrl = "", loadedSlices, audioId }: Props) => {
 
   useEffect(() => {
     setAudioSlices([]);
-    create();
-
-    console.log({ audioUrl });
-    console.log({ loadedSlices });
-  }, [audioUrl, loadedSlices]);
-
-  // Setup textById state on initailzation
-  useEffect(() => {
     const textById = getTextById(loadedSlices);
     setTextById(textById);
-  }, []);
+    create();
+  }, [audioUrl, loadedSlices]);
 
   return (
     <>
