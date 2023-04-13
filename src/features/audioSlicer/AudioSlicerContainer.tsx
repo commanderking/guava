@@ -21,9 +21,11 @@ export default function AudioSlicerContainer() {
           onChange={loadAudio}
         ></input>
       </div>
-      <div className="w-10/12 m-auto">
-        <WaveForm audioUrl={audio} />
-      </div>
+      {audio && (
+        <div className="w-10/12 m-auto">
+          <WaveForm audioUrl={audio} loadedSlices={[]} />
+        </div>
+      )}
     </div>
   );
 }
