@@ -173,6 +173,14 @@ const WaveForm = ({ audioUrl, loadedSlices, audioId }: Props) => {
                     },
                   });
                 }}
+                handleDelete={() => {
+                  waveSurferObject.regions.list[slice.id].remove();
+
+                  const newSlices = [...audioSlices].filter(
+                    (audioSlice) => audioSlice.id !== slice.id
+                  );
+                  setAudioSlices(newSlices);
+                }}
               />
             </div>
           );
