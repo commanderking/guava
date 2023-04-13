@@ -22,7 +22,7 @@ type Props = {
 
 const defaultRGBA = "rgba(0, 0, 0, 0.1)";
 
-const WaveForm = ({ audioUrl = "", loadedSlices, audioId }: Props) => {
+const WaveForm = ({ audioUrl, loadedSlices, audioId }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlayingFullTrack, toggleIsPlayingFullTrack] = useState(false);
   const [currentlyPlayingRegionId, setcurrentlyPlayingRegionId] = useState<
@@ -57,7 +57,6 @@ const WaveForm = ({ audioUrl = "", loadedSlices, audioId }: Props) => {
       container: containerRef.current,
       height: 64,
       plugins: [RegionsPlugin.create({})],
-      responsive: true,
     });
 
     waveSurfer.load(audioUrl);
