@@ -1,10 +1,7 @@
-import { SavedSlice } from "src/features/audioSlicer/types";
+import { AudioSlices } from "src/features/audioSlicer/types";
 
 export const slicesData: {
-  [key: string]: {
-    id: string;
-    slices: SavedSlice[];
-  };
+  [key: string]: AudioSlices;
 } = {
   "taigi_lesson1.m4a": {
     id: "taigi_lesson1.m4a",

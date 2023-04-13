@@ -5,3 +5,13 @@ export type SavedSlice = {
   end: number;
   text?: string;
 };
+
+export type SliceTextType = {
+  id: string;
+  text: string | undefined;
+};
+
+export type AudioSlices = {
+  id: string;
+  slices: SavedSlice[];
+};

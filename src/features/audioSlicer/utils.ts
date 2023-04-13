@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { SavedSlice } from "src/features/audioSlicer/types";
+import { SavedSlice, SliceTextType } from "src/features/audioSlicer/types";
 // @ts-ignore
 import { Region } from "wavesurfer.js/dist/plugin/regions.d.ts";
 
@@ -20,14 +20,19 @@ export function randomRGBA() {
   );
 }
 
-export const getSlicesById = (slices: SavedSlice[]) => {
-  return _.keyBy(slices, "id");
+export const getTextById = (slices: SavedSlice[]) => {
+  const slicesWithOnlyText = slices.map((slice) => ({
+    id: slice.id,
+    text: slice.text,
+  }));
+
+  return _.keyBy(slicesWithOnlyText, "id");
 };
 
 export const formatSlicesToSave = (
   audioId: string,
   regions: Region[],
-  sliceTextById: { [key: string]: any }
+  sliceTextById: { [key: string]: SliceTextType }
 ) => {
   const slices = regions.map((region) => {
     const text = sliceTextById[region.id]?.text || "";

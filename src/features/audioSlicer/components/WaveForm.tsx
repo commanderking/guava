@@ -4,12 +4,12 @@ import { WaveSurfer as WaveSurferType } from "wavesurfer.js";
 import { PlayCircle, PauseCircle, StopCircle } from "react-feather";
 import {
   randomRGBA,
-  getSlicesById,
+  getTextById,
   formatSlicesToSave,
 } from "src/features/audioSlicer/utils";
 // @ts-ignore - only way to get this type(?)
 import { Region } from "wavesurfer.js/dist/plugin/regions.d.ts";
-import { SavedSlice } from "src/features/audioSlicer/types";
+import { SavedSlice, SliceTextType } from "src/features/audioSlicer/types";
 import SliceText from "src/features/audioSlicer/components/SliceText";
 import SaveSlices from "src/features/audioSlicer/components/SaveSlices";
 
@@ -29,10 +29,10 @@ const WaveForm = ({ audioUrl, loadedSlices = [], audioId }: Props) => {
   >(null);
 
   // Currently needed to keep track of the text of each slice. Since we don't control the params stored in wavesurfer region object, we can't append the text to the object. This is the workaround for now.
-  const [textById, setTextById] = useState();
+  const [textById, setTextById] = useState<{ [key: string]: SliceTextType }>(
+    {}
+  );
   const [editingSliceId, setEditingSliceId] = useState<string | null>(null);
-
-  console.log({ textById });
 
   const [waveSurferObject, setWaveSurferObject] =
     useState<WaveSurferType>(null);
@@ -56,6 +56,7 @@ const WaveForm = ({ audioUrl, loadedSlices = [], audioId }: Props) => {
       container: containerRef.current,
       height: 64,
       plugins: [RegionsPlugin.create({})],
+      responsive: true,
     });
 
     waveSurfer.load(audioUrl);
@@ -118,7 +119,9 @@ const WaveForm = ({ audioUrl, loadedSlices = [], audioId }: Props) => {
 
   useEffect(() => {
     setAudioSlices([]);
-    setTextById(getSlicesById(loadedSlices));
+
+    const textById = getTextById(loadedSlices);
+    setTextById(textById);
     create();
   }, [audioUrl, loadedSlices]);
 
