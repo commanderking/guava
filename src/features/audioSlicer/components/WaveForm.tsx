@@ -15,13 +15,14 @@ import SaveSlices from "src/features/audioSlicer/components/SaveSlices";
 
 type Props = {
   audioUrl: string | null;
-  loadedSlices?: SavedSlice[];
+  // It's necesssary to pass in loadedSlices from parent component, even if it's an empty array.  Trying to define default empty array in props results in infinite looping for useEffect - https://github.com/facebook/react/issues/15096
+  loadedSlices: SavedSlice[];
   audioId?: string;
 };
 
 const defaultRGBA = "rgba(0, 0, 0, 0.1)";
 
-const WaveForm = ({ audioUrl, loadedSlices = [], audioId }: Props) => {
+const WaveForm = ({ audioUrl = "", loadedSlices, audioId }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlayingFullTrack, toggleIsPlayingFullTrack] = useState(false);
   const [currentlyPlayingRegionId, setcurrentlyPlayingRegionId] = useState<
@@ -119,35 +120,37 @@ const WaveForm = ({ audioUrl, loadedSlices = [], audioId }: Props) => {
 
   useEffect(() => {
     setAudioSlices([]);
+    create();
 
+    console.log({ audioUrl });
+    console.log({ loadedSlices });
+  }, [audioUrl, loadedSlices]);
+
+  // Setup textById state on initailzation
+  useEffect(() => {
     const textById = getTextById(loadedSlices);
     setTextById(textById);
-    create();
-  }, [audioUrl, loadedSlices]);
+  }, []);
 
   return (
     <>
-      {audioUrl && (
-        <>
-          <div className="flex">
-            <button
-              className="flex-none"
-              onClick={() => {
-                playPauseFullTrack();
-              }}
-            >
-              {isPlayingFullTrack ? (
-                <PauseCircle size={48} />
-              ) : (
-                <PlayCircle size={48} />
-              )}
-            </button>
-            <div className="flex-initial w-full">
-              <div className="w-full" ref={containerRef} />
-            </div>
-          </div>
-        </>
-      )}
+      <div className="flex">
+        <button
+          className="flex-none"
+          onClick={() => {
+            playPauseFullTrack();
+          }}
+        >
+          {isPlayingFullTrack ? (
+            <PauseCircle size={48} />
+          ) : (
+            <PlayCircle size={48} />
+          )}
+        </button>
+        <div className="flex-initial w-full">
+          <div className="w-full" ref={containerRef} />
+        </div>
+      </div>
       <div className="ml-24">
         {audioSlices.map((slice, index) => {
           return (
