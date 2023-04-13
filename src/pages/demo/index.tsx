@@ -13,6 +13,14 @@ const options = [
     text: "Taiwanese Lesson 3",
     value: "taigi_lesson3.m4a",
   },
+  {
+    text: "Taiwanese Lesson 5",
+    value: "taigi_lesson5.m4a",
+  },
+  {
+    text: "Taiwanese Lesson 6",
+    value: "taigi_lesson6.m4a",
+  },
 ];
 
 const DemoContainer = () => {
@@ -21,6 +29,8 @@ const DemoContainer = () => {
   const handleSelect = (value: string) => {
     setSelectedAudio(value);
   };
+
+  const loadedSlices = slicesData[selectedAudio]?.slices || [];
 
   return (
     <div className="w-8/12 m-auto mt-8 p-8">
@@ -32,13 +42,7 @@ const DemoContainer = () => {
         />
       </div>
       <div className="p-8">
-        <WaveForm
-          audioUrl={selectedAudio}
-          loadedSlices={
-            (slicesData[selectedAudio] && slicesData[selectedAudio].slices) ||
-            []
-          }
-        />
+        <WaveForm audioUrl={selectedAudio} loadedSlices={loadedSlices} />
       </div>
     </div>
   );

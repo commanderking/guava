@@ -1,11 +1,12 @@
 import { useRef, useEffect, useState } from "react";
 // @ts-ignore - need WaveSurfer type to satsify types here
 import { WaveSurfer as WaveSurferType } from "wavesurfer.js";
-import { PlayCircle, PauseCircle, Plus, StopCircle } from "react-feather";
-import { randomRGBA } from "src/features/audioSlicer/utils";
-// @ts-ignore - it's able to find the RegionParams type
-import { RegionParams } from "wavesurfer.js/dist/plugin/wavesurfer.regions.min.js";
+import { PlayCircle, PauseCircle, StopCircle } from "react-feather";
+import { randomRGBA, getSlicesById } from "src/features/audioSlicer/utils";
+// @ts-ignore - only way to get this type(?)
+import { Region } from "wavesurfer.js/dist/plugin/regions.d.ts";
 import { SavedSlice } from "src/features/audioSlicer/types";
+import SliceText from "src/features/audioSlicer/components/SliceText";
 
 type Props = {
   audioUrl: string | null;
@@ -14,17 +15,21 @@ type Props = {
 
 const defaultRGBA = "rgba(0, 0, 0, 0.1)";
 
-const WaveForm = ({ audioUrl, loadedSlices }: Props) => {
+const WaveForm = ({ audioUrl, loadedSlices = [] }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlayingFullTrack, toggleIsPlayingFullTrack] = useState(false);
   const [currentlyPlayingRegionId, setcurrentlyPlayingRegionId] = useState<
     string | null
   >(null);
 
+  // Currently needed to keep track of the text of each slice. Since we don't control the params stored in wavesurfer region object, we can't append the text to the object. This is the workaround for now.
+  const [textById, setTextById] = useState(getSlicesById(loadedSlices));
+  const [editingSliceId, setEditingSliceId] = useState<string | null>(null);
+
   const [waveSurferObject, setWaveSurferObject] =
     useState<WaveSurferType>(null);
 
-  const [audioSlices, setAudioSlices] = useState<RegionParams[]>([]);
+  const [audioSlices, setAudioSlices] = useState<Region[]>([]);
 
   const create = async () => {
     const WaveSurfer = (await import("wavesurfer.js")).default;
@@ -32,7 +37,6 @@ const WaveForm = ({ audioUrl, loadedSlices }: Props) => {
       // @ts-ignore - not sure if there's a better way to dynamically import here
       (await import("wavesurfer.js/dist/plugin/wavesurfer.regions.min.js"))
         .default;
-
     if (!containerRef.current || !audioUrl) {
       return null;
     }
@@ -61,7 +65,7 @@ const WaveForm = ({ audioUrl, loadedSlices }: Props) => {
       setcurrentlyPlayingRegionId(null);
     });
 
-    waveSurfer.on("region-created", (region: RegionParams) => {
+    waveSurfer.on("region-created", (region: Region) => {
       // If slice is added, it should have a defaultRGBA. Assign a random color
       // Don't add a randomRGBA if one has already been assigned from a previous case
       if (region.color === defaultRGBA) {
@@ -92,12 +96,6 @@ const WaveForm = ({ audioUrl, loadedSlices }: Props) => {
     toggleIsPlayingFullTrack(!isPlayingFullTrack);
   };
 
-  // Only used when user clicks the "Add New Slice Button"
-  const addNewSlice = () => {
-    const newRegion = { start: 0, end: 3 };
-    waveSurferObject.addRegion(newRegion);
-  };
-
   const playStopRegion = (id: string) => {
     toggleIsPlayingFullTrack(false);
     if (currentlyPlayingRegionId === id) {
@@ -112,7 +110,6 @@ const WaveForm = ({ audioUrl, loadedSlices }: Props) => {
 
   useEffect(() => {
     setAudioSlices([]);
-
     create();
   }, [audioUrl]);
 
@@ -124,7 +121,7 @@ const WaveForm = ({ audioUrl, loadedSlices }: Props) => {
             <button
               className="flex-none"
               onClick={() => {
-                return playPauseFullTrack();
+                playPauseFullTrack();
               }}
             >
               {isPlayingFullTrack ? (
@@ -136,17 +133,6 @@ const WaveForm = ({ audioUrl, loadedSlices }: Props) => {
             <div className="flex-initial w-full">
               <div className="w-full" ref={containerRef} />
             </div>
-          </div>
-          <div className="m-4">
-            <button
-              className="flex items-center bg-lime-200 hover:bg-lime-300 text-black font-bold py-2 px-4 rounded-full"
-              onClick={() => {
-                addNewSlice();
-              }}
-            >
-              <Plus size={24} />
-              <span>Add New Slice</span>
-            </button>
           </div>
         </>
       )}
@@ -165,7 +151,22 @@ const WaveForm = ({ audioUrl, loadedSlices }: Props) => {
                   <PlayCircle fill={slice.color} size={48} />
                 )}
               </button>
-              <span className="ml-4">Slice {index + 1}</span>
+              <SliceText
+                text={textById[slice.id]?.text || `Slice ${index + 1}`}
+                isEditing={editingSliceId === slice.id}
+                handleEdit={() => {
+                  setEditingSliceId(slice.id);
+                }}
+                handleSave={(text: String) => {
+                  setEditingSliceId(null);
+                  setTextById({
+                    ...textById,
+                    [slice.id]: {
+                      text,
+                    },
+                  });
+                }}
+              />
             </div>
           );
         })}
