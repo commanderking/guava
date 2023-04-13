@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 // @ts-ignore - need WaveSurfer type to satsify types here
 import { WaveSurfer as WaveSurferType } from "wavesurfer.js";
-import { PlayCircle, PauseCircle, Plus, StopCircle, Edit } from "react-feather";
+import { PlayCircle, PauseCircle, StopCircle } from "react-feather";
 import { randomRGBA, getSlicesById } from "src/features/audioSlicer/utils";
 // @ts-ignore - only way to get this type(?)
 import { Region } from "wavesurfer.js/dist/plugin/regions.d.ts";
@@ -24,7 +24,6 @@ const WaveForm = ({ audioUrl, loadedSlices = [] }: Props) => {
 
   // Currently needed to keep track of the text of each slice. Since we don't control the params stored in wavesurfer region object, we can't append the text to the object. This is the workaround for now.
   const [textById, setTextById] = useState(getSlicesById(loadedSlices));
-
   const [editingSliceId, setEditingSliceId] = useState<string | null>(null);
 
   const [waveSurferObject, setWaveSurferObject] =
@@ -97,12 +96,6 @@ const WaveForm = ({ audioUrl, loadedSlices = [] }: Props) => {
     toggleIsPlayingFullTrack(!isPlayingFullTrack);
   };
 
-  // Only used when user clicks the "Add New Slice Button"
-  const addNewSlice = () => {
-    const newRegion = { start: 0, end: 3 };
-    waveSurferObject.addRegion(newRegion);
-  };
-
   const playStopRegion = (id: string) => {
     toggleIsPlayingFullTrack(false);
     if (currentlyPlayingRegionId === id) {
@@ -117,7 +110,6 @@ const WaveForm = ({ audioUrl, loadedSlices = [] }: Props) => {
 
   useEffect(() => {
     setAudioSlices([]);
-
     create();
   }, [audioUrl]);
 
@@ -129,7 +121,7 @@ const WaveForm = ({ audioUrl, loadedSlices = [] }: Props) => {
             <button
               className="flex-none"
               onClick={() => {
-                return playPauseFullTrack();
+                playPauseFullTrack();
               }}
             >
               {isPlayingFullTrack ? (
@@ -141,17 +133,6 @@ const WaveForm = ({ audioUrl, loadedSlices = [] }: Props) => {
             <div className="flex-initial w-full">
               <div className="w-full" ref={containerRef} />
             </div>
-          </div>
-          <div className="m-4">
-            <button
-              className="flex items-center bg-lime-200 hover:bg-lime-300 text-black font-bold py-2 px-4 rounded-full"
-              onClick={() => {
-                addNewSlice();
-              }}
-            >
-              <Plus size={24} />
-              <span>Add New Slice</span>
-            </button>
           </div>
         </>
       )}
