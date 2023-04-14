@@ -1,4 +1,4 @@
-import { CheckCircle, Edit } from "react-feather";
+import { CheckCircle, Edit, XCircle } from "react-feather";
 import { useState } from "react";
 
 type Props = {
@@ -6,9 +6,16 @@ type Props = {
   isEditing: boolean;
   handleEdit: () => void;
   handleSave: (text: string) => void;
+  handleDelete: () => void;
 };
 
-const SliceText = ({ text, isEditing, handleEdit, handleSave }: Props) => {
+const SliceText = ({
+  text,
+  isEditing,
+  handleEdit,
+  handleSave,
+  handleDelete,
+}: Props) => {
   const [value, setValue] = useState(text);
 
   return (
@@ -41,6 +48,14 @@ const SliceText = ({ text, isEditing, handleEdit, handleSave }: Props) => {
         className="ml-4"
       >
         {isEditing ? <CheckCircle size={24} /> : <Edit size={24} />}
+      </button>
+      <button
+        onClick={() => {
+          handleDelete();
+        }}
+        className="ml-4"
+      >
+        <XCircle size={24} />
       </button>
     </>
   );
