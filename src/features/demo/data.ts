@@ -257,7 +257,7 @@ export const slicesData: {
         color: "rgba(91,196,195,0.2)",
         start: 8.677914833980163,
         end: 11.613773393704182,
-        text: "Tiō sī-ah. Hōo(?) tsóng-sǹg lo̍h suah-ah.",
+        text: "Tiō sī-ah. Hōo tsóng-sǹg lo̍h suah-ah.",
       },
       {
         id: "wavesurfer_n6f2ev47gb",
