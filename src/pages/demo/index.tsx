@@ -25,6 +25,10 @@ const options = [
     text: "Taiwanese Lesson 7",
     value: "taigi_lesson7.m4a",
   },
+  {
+    text: "Taiwanese Lesson 10",
+    value: "taigi_lesson10.m4a",
+  },
 ];
 
 const DemoContainer = () => {
