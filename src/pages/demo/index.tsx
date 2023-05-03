@@ -6,6 +6,10 @@ import { slicesData } from "src/features/demo/data";
 
 const options = [
   {
+    text: "Taiwanese Lesson 11",
+    value: "taigi_lesson11.m4a",
+  },
+  {
     text: "Taiwanese Lesson 1",
     value: "taigi_lesson1.m4a",
   },
