@@ -13,5 +13,6 @@ export type SliceTextType = {
 
 export type AudioSlices = {
   id: string;
+  name: string;
   slices: SavedSlice[];
 };
