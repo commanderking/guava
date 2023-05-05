@@ -5,6 +5,8 @@ export const slicesData: {
 } = {
   "taigi_lesson1.m4a": {
     id: "taigi_lesson1.m4a",
+    name: "Taiwanese Lesson 1",
+
     slices: [
       {
         id: "wavesurfer_58q8hoi7ib",
@@ -38,6 +40,8 @@ export const slicesData: {
   },
   "taigi_lesson6.m4a": {
     id: "taigi_lesson6.m4a",
+    name: "Taiwanese Lesson 6",
+
     slices: [
       {
         id: "wavesurfer_f00dbr1lt4o",
@@ -155,6 +159,8 @@ export const slicesData: {
   },
   "taigi_lesson5.m4a": {
     id: "taigi_lesson5.m4a",
+    name: "Taiwanese Lesson 5",
+
     slices: [
       {
         id: "wavesurfer_4p13mv22fi",
@@ -237,6 +243,8 @@ export const slicesData: {
   },
   "taigi_lesson7.m4a": {
     id: "taigi_lesson7.m4a",
+    name: "Taiwanese Lesson 7",
+
     slices: [
       {
         id: "wavesurfer_pol8vc0hqmo",
@@ -319,6 +327,8 @@ export const slicesData: {
   },
   "taigi_lesson10.m4a": {
     id: "taigi_lesson10.m4a",
+    name: "Taiwanese Lesson 10",
+
     slices: [
       {
         id: "wavesurfer_2ja81eclvvo",
@@ -450,6 +460,8 @@ export const slicesData: {
   },
   "taigi_lesson11.m4a": {
     id: "taigi_lesson11.m4a",
+    name: "Taiwanese Lesson 11",
+
     slices: [
       {
         id: "wavesurfer_dofq81iosp",
