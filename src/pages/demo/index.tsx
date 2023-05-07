@@ -3,39 +3,10 @@ import { useState } from "react";
 import WaveForm from "src/features/audioSlicer/components/WaveForm";
 import Select from "src/components/Select";
 import { slicesData } from "src/features/demo/data";
-
-const options = [
-  {
-    text: "Taiwanese Lesson 11",
-    value: "taigi_lesson11.m4a",
-  },
-  {
-    text: "Taiwanese Lesson 1",
-    value: "taigi_lesson1.m4a",
-  },
-  {
-    text: "Taiwanese Lesson 3",
-    value: "taigi_lesson3.m4a",
-  },
-  {
-    text: "Taiwanese Lesson 5",
-    value: "taigi_lesson5.m4a",
-  },
-  {
-    text: "Taiwanese Lesson 6",
-    value: "taigi_lesson6.m4a",
-  },
-  {
-    text: "Taiwanese Lesson 7",
-    value: "taigi_lesson7.m4a",
-  },
-  {
-    text: "Taiwanese Lesson 10",
-    value: "taigi_lesson10.m4a",
-  },
-];
+import { getDemoOptions } from "src/features/demo/utils";
 
 const DemoContainer = () => {
+  const options = [...getDemoOptions(slicesData).reverse()];
   const [selectedAudio, setSelectedAudio] = useState(options[0].value);
 
   const handleSelect = (value: string) => {
