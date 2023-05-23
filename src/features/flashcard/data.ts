@@ -1,4 +1,16 @@
-const lessons = [
+type Card = {
+  audio: string;
+  audioText: string;
+  primaryTranslation: string;
+};
+
+export type Lesson = {
+  name: string;
+  id: string;
+  cards: Card[];
+};
+
+export const lessons = [
   {
     name: "Taiwanese Lesson 8",
     id: "taigi_lesson_8",
@@ -62,6 +74,36 @@ const lessons = [
           "https://1763c5ee9859e0316ed6-db85b55a6a3fbe33f09b9245992383bd.ssl.cf1.rackcdn.com/09694.mp3",
         audioText: "hioh-khùn",
         primaryTranslation: "休息",
+      },
+    ],
+  },
+  {
+    name: "Taiwanese Lesson 16",
+    id: "taigi_lesson_8",
+    cards: [
+      {
+        audio:
+          "https://1763c5ee9859e0316ed6-db85b55a6a3fbe33f09b9245992383bd.ssl.cf1.rackcdn.com/03798.mp3",
+        audioText: "kî-kuài",
+        primaryTranslation: "奇怪",
+      },
+      {
+        audio:
+          "https://1763c5ee9859e0316ed6-db85b55a6a3fbe33f09b9245992383bd.ssl.cf1.rackcdn.com/06788.mp3",
+        audioText: "thó-ià",
+        primaryTranslation: "討厭",
+      },
+      {
+        audio:
+          "https://1763c5ee9859e0316ed6-db85b55a6a3fbe33f09b9245992383bd.ssl.cf1.rackcdn.com/02344.mp3",
+        audioText: "hó-ka-tsài",
+        primaryTranslation: "幸好",
+      },
+      {
+        audio:
+          "https://1763c5ee9859e0316ed6-db85b55a6a3fbe33f09b9245992383bd.ssl.cf1.rackcdn.com/11656.mp3",
+        audioText: "ha̍k-hāu",
+        primaryTranslation: "學校",
       },
     ],
   },

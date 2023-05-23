@@ -68,7 +68,7 @@ const FlashcardPage = () => {
     config: { mass: 5, tension: 500, friction: 80 },
   });
   return (
-    <div className="flex align-center h-full justify-center h-[400px] relative">
+    <div className="flex align-center h-full justify-center h-[410px] relative">
       {!flipped && (
         <a.div
           className="max-w-lg max-h-lg absolute w-[350px] z-5 h-[350px] will-change-transform will-change-opacity border-2 bg-blue-500 flex items-center justify-center"
