@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSpring, a } from "@react-spring/web";
 import { ArrowLeftCircle, ArrowRightCircle } from "react-feather";
-import { lessons, Lesson } from "src/features/flashcard/data";
+import { Card } from "src/features/flashcard/data";
 import _ from "lodash";
 
 const getNextIndex = (currentIndex: number, maxLength: number) => {
@@ -22,7 +22,7 @@ const getPreviousIndex = (currentIndex: number) => {
 };
 
 type Props = {
-  initialFlashcards: Lesson["cards"];
+  initialFlashcards: Card[];
 };
 
 const FlashcardPage = ({ initialFlashcards }: Props) => {
