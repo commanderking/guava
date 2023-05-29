@@ -53,6 +53,7 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
     transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
     config: { mass: 5, tension: 500, friction: 80 },
   });
+
   return (
     <div>
       <div className="text-center">
