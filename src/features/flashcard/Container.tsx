@@ -46,7 +46,7 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
     if (event.code === "ArrowRight") {
       handleNextIndex();
     }
-    if (event.code === "Space") {
+    if (event.code === "Space" || event.code === "ArrowDown") {
       setFlipped(!flipped);
     }
   };
@@ -87,31 +87,23 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
             <a.div
               className="max-w-lg max-h-lg w-[350px] z-5 h-[350px] will-change-transform will-change-opacity border-2 bg-blue-500 flex items-center justify-center"
               style={{ opacity: opacity.to((o) => 1 - o), transform }}
-              onClick={() => setFlipped((state) => !state)}
             >
               <audio autoPlay controls src={flashcards[cardIndex].audio} />
             </a.div>
           )}
           {flipped && (
             <a.div
-              className="max-w-lg max-h-lg w-[350px] h-[350px] will-change-transform will-change-opacity border-2 bg-red-500 flex items-center justify-center"
+              className="max-w-lg max-h-lg w-[350px] h-[350px] will-change-transform will-change-opacity border-2 bg-red-500 flex items-center justify-center flex-col"
               style={{
                 opacity,
                 transform,
                 rotateX: "180deg",
               }}
-              onClick={() => setFlipped((state) => !state)}
             >
-              <div>
-                <span className="text-xl">
-                  {flashcards[cardIndex].audioText}
-                </span>
-              </div>
-              <div>
-                <span className="text-xl">
-                  {flashcards[cardIndex].primaryTranslation}
-                </span>
-              </div>
+              <span className="text-xl">{flashcards[cardIndex].audioText}</span>
+              <span className="text-xl">
+                {flashcards[cardIndex].primaryTranslation}
+              </span>
             </a.div>
           )}
         </div>
