@@ -20,7 +20,9 @@ const FlashcardDemo = () => {
 
   return (
     <div>
-      {cards.length && <FlashcardContainer initialFlashcards={cards} />};
+      {Boolean(cards.length) && (
+        <FlashcardContainer initialFlashcards={cards} />
+      )}
     </div>
   );
 };
