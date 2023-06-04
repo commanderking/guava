@@ -143,7 +143,7 @@ const WaveForm = ({ audioUrl, loadedSlices, audioId }: Props) => {
           <div className="w-full" ref={containerRef} />
         </div>
       </div>
-      <div className="ml-24">
+      <div className="ml-4 sm:ml-24">
         {audioSlices.map((slice, index) => {
           return (
             <div key={slice.id} className="flex items-center">

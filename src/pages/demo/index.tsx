@@ -16,15 +16,15 @@ const DemoContainer = () => {
   const loadedSlices = slicesData[selectedAudio]?.slices || [];
 
   return (
-    <div className="w-8/12 m-auto mt-8 p-8">
-      <div className="w-1/4 m-auto">
+    <div className="w-10/12 sm:w-8/12 m-auto mt-8 p-2 sm:p-8">
+      <div className="w-full sm:w-1/4 m-auto">
         <Select
           options={options}
           defaultText="Select Demo Audio"
           handleSelect={handleSelect}
         />
       </div>
-      <div className="p-8">
+      <div className="p-2 sm:p-8">
         <WaveForm
           audioUrl={selectedAudio}
           loadedSlices={loadedSlices}
