@@ -17,7 +17,7 @@ const DemoContainer = () => {
 
   return (
     <div className="w-10/12 sm:w-8/12 m-auto mt-8 p-2 sm:p-8">
-      <div className="md:w-1/4 sm:w-3/4 m-auto">
+      <div className="w-full sm:w-1/4 m-auto">
         <Select
           options={options}
           defaultText="Select Demo Audio"
