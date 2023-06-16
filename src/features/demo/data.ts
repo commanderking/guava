@@ -1125,4 +1125,9 @@ export const slicesData: {
       },
     ],
   },
+  "taigi_lesson19.m4a": {
+    name: "Taiwanese Lesson 19",
+    id: "taigi_lesson19.m4a",
+    slices: [],
+  },
 };
