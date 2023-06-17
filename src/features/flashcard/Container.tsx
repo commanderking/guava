@@ -71,20 +71,20 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
   });
 
   return (
-    <div>
-      <div className="text-center">
+    <div className="max-w-[400px] m-auto">
+      <div className="text-center pt-4">
         <button
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="bg-transparent hover:bg-lime-500 text-lime-700 font-semibold hover:text-white py-2 px-4 border-2 border-lime-500 hover:border-transparent rounded"
           onClick={handleRandomize}
         >
           Randomize
         </button>
       </div>
-      <div>
-        <div className="flex align-center h-full justify-center h-[360px] relative">
+      <div className="pt-4">
+        <div className="flex align-center h-full justify-center relative">
           {!flipped && (
             <a.div
-              className="max-w-lg max-h-lg w-[350px] z-5 h-[350px] will-change-transform will-change-opacity border-2 bg-blue-500 flex items-center justify-center"
+              className="max-w-lg max-h-lg w-full z-5 h-[200px] will-change-transform will-change-opacity border-2 border-lime-500 flex items-center justify-center"
               style={{ opacity: opacity.to((o) => 1 - o), transform }}
             >
               <audio autoPlay controls src={flashcards[cardIndex].audio} />
@@ -92,7 +92,7 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
           )}
           {flipped && (
             <a.div
-              className="max-w-lg max-h-lg w-[350px] h-[350px] will-change-transform will-change-opacity border-2 bg-red-500 flex items-center justify-center flex-col"
+              className="max-w-lg max-h-lg w-full h-[200px] will-change-transform will-change-opacity border-2 border-red-300 flex items-center justify-center flex-col"
               style={{
                 opacity,
                 transform,
@@ -107,20 +107,33 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
           )}
         </div>
       </div>
+      <div className="flex justify-center m-4">
+        <p className="text-xl">
+          {cardIndex + 1} / {flashcards.length}
+        </p>
+      </div>
       <div className="flex justify-center">
         <button>
-          <ArrowLeftCircle onClick={handlePreviousIndex} size={36} />
+          <ArrowLeftCircle
+            color="#84cc16"
+            onClick={handlePreviousIndex}
+            size={36}
+          />
         </button>
         <div>
           <button
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="bg-transparent hover:bg-lime-500 text-lime-700 font-semibold hover:text-white py-2 px-4 border-2 border-lime-500 hover:border-transparent rounded"
             onClick={() => setFlipped((state) => !state)}
           >
             Flip
           </button>
         </div>
         <button>
-          <ArrowRightCircle onClick={handleNextIndex} size={36} />
+          <ArrowRightCircle
+            color="#84cc16"
+            onClick={handleNextIndex}
+            size={36}
+          />
         </button>
       </div>
     </div>
