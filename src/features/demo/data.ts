@@ -1211,14 +1211,14 @@ export const slicesData: {
         color: "rgba(78,113,220,0.2)",
         start: 31.750023408239702,
         end: 34.68690057350187,
-        text: "koh ū tsin tsē tōng-bu̍t sàn-poo. ",
+        text: "koh ū tsin tsē tōng-bu̍t tshut-mn̂g sàn-poo. ",
       },
       {
         id: "wavesurfer_5s5026c3dro",
         color: "rgba(49,58,36,0.2)",
         start: 34.845650690543074,
         end: 37.38565256320225,
-        text: "Guá ū khuànn-tio̍h tõo-kún-á",
+        text: "Guá ū khuànn-tio̍h tōo-kún-á",
       },
       {
         id: "wavesurfer_enbt1lrfqvo",
