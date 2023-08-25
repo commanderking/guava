@@ -96,7 +96,7 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
         <div className="flex align-center h-full justify-center relative text-center">
           {!flipped && (
             <a.div
-              className="max-w-lg max-h-lg w-full z-5 h-[200px] will-change-transform will-change-opacity border-2 border-lime-500 flex items-center justify-center flex-col "
+              className="max-w-lg max-h-lg w-full z-5 h-[200px] will-change-transform will-change-opacity border-2 border-lime-500 flex items-center justify-center"
               style={{ opacity: opacity.to((o) => 1 - o), transform }}
             >
               <CardContent

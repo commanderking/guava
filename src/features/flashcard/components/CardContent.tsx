@@ -10,7 +10,11 @@ const AttributeContent = ({ attribute, card }: ContentProps) => {
     return <audio autoPlay controls src={card.audio} />;
   }
 
-  return <span className="text-xl">{card[attribute]}</span>;
+  return (
+    <div>
+      <span className="text-xl">{card[attribute]}</span>
+    </div>
+  );
 };
 
 type CardContentProps = {

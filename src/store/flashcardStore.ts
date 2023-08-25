@@ -7,8 +7,8 @@ type FlashcardState = {
 
 export const useFlashcardStore = create<FlashcardState>((set) => ({
   // TODO: Default will eventually come from backend source or constant
-  cardFrontContent: ["audio", "audioText"],
-  cardBackContent: ["primaryTranslation"],
+  cardFrontContent: ["audio"],
+  cardBackContent: ["primaryTranslation", "audioText"],
 
   setCardAttributes: (
     front: Array<CardAttribute>,
