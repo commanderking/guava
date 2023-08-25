@@ -22,7 +22,9 @@ const CardContent = ({ sideAttributes, card }: CardContentProps) => {
   return (
     <div>
       {sideAttributes.map((attribute) => {
-        return <AttributeContent attribute={attribute} card={card} />;
+        return (
+          <AttributeContent key={attribute} attribute={attribute} card={card} />
+        );
       })}
     </div>
   );

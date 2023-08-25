@@ -28,13 +28,23 @@ const CardEditor = () => {
         <div>
           <h3>Card Front</h3>
           {cardAttributes.map((attribute) => {
-            return <CardAttributeChecklist attribute={attribute} />;
+            return (
+              <CardAttributeChecklist
+                key={`front-${attribute.key}`}
+                attribute={attribute}
+              />
+            );
           })}
         </div>
         <div>
           <h3>Card Back</h3>
           {cardAttributes.map((attribute) => {
-            return <CardAttributeChecklist attribute={attribute} />;
+            return (
+              <CardAttributeChecklist
+                key={`front-${attribute.key}`}
+                attribute={attribute}
+              />
+            );
           })}
         </div>
       </div>

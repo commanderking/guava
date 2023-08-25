@@ -83,7 +83,7 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
 
   return (
     <div className="max-w-[400px] m-auto">
-      <CardEditor />
+      {/* <CardEditor /> */}
       <div className="text-center pt-4">
         <button
           className="bg-transparent hover:bg-lime-500 text-lime-700 font-semibold hover:text-white py-2 px-4 border-2 border-lime-500 hover:border-transparent rounded"
