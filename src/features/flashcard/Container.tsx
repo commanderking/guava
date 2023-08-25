@@ -76,11 +76,10 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
     config: { mass: 5, tension: 500, friction: 80 },
   });
 
-  const selectedCardAttributes = useFlashcardStore(
-    (state) => state.selectedCardAttributes
-  );
-
-  const { front, back } = selectedCardAttributes;
+  const { front, back } = useFlashcardStore((state) => ({
+    front: state.cardFrontContent,
+    back: state.cardBackContent,
+  }));
 
   return (
     <div className="max-w-[400px] m-auto">

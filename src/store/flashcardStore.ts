@@ -1,24 +1,23 @@
 import { create } from "zustand";
 import { CardAttribute } from "src/features/flashcard/types";
 type FlashcardState = {
-  selectedCardAttributes: {
-    front: Array<CardAttribute>;
-    back: Array<CardAttribute>;
-  };
+  cardFrontContent: Array<CardAttribute>;
+  cardBackContent: Array<CardAttribute>;
 };
 
 export const useFlashcardStore = create<FlashcardState>((set) => ({
   // TODO: Default will eventually come from backend source or constant
-  selectedCardAttributes: {
-    front: ["audio", "audioText"],
-    back: ["primaryTranslation"],
-  },
+  cardFrontContent: ["audio", "audioText"],
+  cardBackContent: ["primaryTranslation"],
+
   setCardAttributes: (
-    cardAttributes: FlashcardState["selectedCardAttributes"]
+    front: Array<CardAttribute>,
+    back: Array<CardAttribute>
   ) => {
-    return set((state) => {
+    return set(() => {
       return {
-        selectedCardAttributes: cardAttributes,
+        cardFrontContent: front,
+        cardBackContent: back,
       };
     });
   },
