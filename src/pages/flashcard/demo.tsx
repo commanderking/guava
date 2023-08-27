@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card } from "src/features/flashcard/data";
+import { Card } from "src/features/flashcard/types";
 import _ from "lodash";
 import FlashcardContainer from "src/features/flashcard/Container";
 import Papa from "papaparse";

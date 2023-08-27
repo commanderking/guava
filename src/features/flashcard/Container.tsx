@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSpring, a } from "@react-spring/web";
 import { ArrowLeftCircle, ArrowRightCircle } from "react-feather";
-import { Card } from "src/features/flashcard/data";
+import { Card } from "src/features/flashcard/types";
+import CardEditor from "src/features/flashcard/components/CardEditor";
+import { useFlashcardStore } from "src/store/flashcardStore";
+import CardContent from "src/features/flashcard/components/CardContent";
+
 import _ from "lodash";
 
 const getNextIndex = (currentIndex: number, maxLength: number) => {
@@ -31,11 +35,13 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
 
   const handleNextIndex = () => {
     const nextIndex = getNextIndex(cardIndex, maxLength);
+    setFlipped(false);
     setCardIndex(nextIndex);
   };
 
   const handlePreviousIndex = () => {
     const previousIndex = getPreviousIndex(cardIndex);
+    setFlipped(false);
     setCardIndex(previousIndex);
   };
 
@@ -70,8 +76,14 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
     config: { mass: 5, tension: 500, friction: 80 },
   });
 
+  const { front, back } = useFlashcardStore((state) => ({
+    front: state.cardFrontContent,
+    back: state.cardBackContent,
+  }));
+
   return (
     <div className="max-w-[400px] m-auto">
+      {/* <CardEditor /> */}
       <div className="text-center pt-4">
         <button
           className="bg-transparent hover:bg-lime-500 text-lime-700 font-semibold hover:text-white py-2 px-4 border-2 border-lime-500 hover:border-transparent rounded"
@@ -81,13 +93,16 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
         </button>
       </div>
       <div className="pt-4">
-        <div className="flex align-center h-full justify-center relative">
+        <div className="flex align-center h-full justify-center relative text-center">
           {!flipped && (
             <a.div
               className="max-w-lg max-h-lg w-full z-5 h-[200px] will-change-transform will-change-opacity border-2 border-lime-500 flex items-center justify-center"
               style={{ opacity: opacity.to((o) => 1 - o), transform }}
             >
-              <audio autoPlay controls src={flashcards[cardIndex].audio} />
+              <CardContent
+                card={flashcards[cardIndex]}
+                sideAttributes={front}
+              />
             </a.div>
           )}
           {flipped && (
@@ -99,10 +114,7 @@ const FlashcardPage = ({ initialFlashcards }: Props) => {
                 rotateX: "180deg",
               }}
             >
-              <span className="text-xl">{flashcards[cardIndex].audioText}</span>
-              <span className="text-xl">
-                {flashcards[cardIndex].primaryTranslation}
-              </span>
+              <CardContent card={flashcards[cardIndex]} sideAttributes={back} />
             </a.div>
           )}
         </div>
