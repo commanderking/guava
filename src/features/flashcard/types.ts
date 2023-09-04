@@ -1,4 +1,10 @@
-type CardAttributes = ["audio", "audioText", "primaryTranslation", "台語漢字"];
+type CardAttributes = [
+  "audio",
+  "audioText",
+  "primaryTranslation",
+  "secondaryTranslation",
+  "台語漢字"
+];
 
 export type CardAttribute = CardAttributes[any];
 
@@ -14,5 +20,6 @@ export type Card = {
   audio: string;
   audioText: string;
   primaryTranslation: string;
+  secondaryTranslation?: string;
   台語漢字: string;
 };
