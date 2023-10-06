@@ -18,7 +18,7 @@ const AudioRenderer = ({ value }: Params) => {
     }
   };
   return (
-    <div>
+    <div className="flex h-full align-items-center">
       <audio src={value} />
       <button>
         <PlayCircle onClick={playAudio} />
